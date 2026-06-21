@@ -42,5 +42,5 @@ nginx -t
 systemctl restart nginx
 
 echo "==> Hoàn tất!"
-echo "Truy cập: http://$(curl -s ifconfig.me 2>/dev/null || hostname -I | awk '{print $1}')"
-systemctl status tts-free --no-pager
+ufw allow 8888/tcp 2>/dev/null || true
+echo "Truy cập: http://$(curl -s ifconfig.me 2>/dev/null || hostname -I | awk '{print $1}'):8888"
