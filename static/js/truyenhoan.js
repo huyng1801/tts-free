@@ -18,8 +18,16 @@ const chapterNextBtn = $t("chapterNextBtn");
 const loadChapterBtn = $t("loadChapterBtn");
 const truyenhoanStatus = $t("truyenhoanStatus");
 const panelTruyenhoan = $t("panelTruyenhoan");
-const textInput = $t("textInput");
-const charCount = $t("charCount");
+
+function setStoryText(value) {
+  const input = $t("textInput");
+  const count = $t("charCount");
+  if (!input) return;
+  input.value = value;
+  if (count) count.textContent = value.length.toLocaleString("vi-VN");
+  input.dispatchEvent(new Event("input", { bubbles: true }));
+  localStorage.setItem("bao_ngan_draft", value);
+}
 
 function showStatus(msg, isError = false) {
   truyenhoanStatus.textContent = msg;
@@ -79,8 +87,7 @@ async function searchStories() {
           chapterNumInput.value = data.chapter.number;
           await loadChapter(false);
         } else {
-          textInput.value = `${data.chapter.title}\n\n${data.chapter.text}`;
-          charCount.textContent = textInput.value.length.toLocaleString("vi-VN");
+          setStoryText(`${data.chapter.title}\n\n${data.chapter.text}`);
           showStatus(`Đã lấy ${data.chapter.title}`);
         }
       } catch (e) {
@@ -202,9 +209,7 @@ async function loadChapter(autoGenerate = false) {
     if (!data.ok) throw new Error(data.error);
 
     const header = `${data.chapter.title}\n\n`;
-    textInput.value = header + data.chapter.text;
-    charCount.textContent = textInput.value.length.toLocaleString("vi-VN");
-    localStorage.setItem("bao_ngan_draft", textInput.value);
+    setStoryText(header + data.chapter.text);
 
     chapterSelect.value = num;
     showStatus(`Đã lấy chương ${num} (${data.chapter.char_count.toLocaleString("vi-VN")} ký tự)`);

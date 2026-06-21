@@ -87,6 +87,14 @@ function populateVoices(voices, filter = "") {
     : voices;
 
   voiceSelect.innerHTML = "";
+  if (!filtered.length) {
+    const empty = document.createElement("option");
+    empty.value = "";
+    empty.textContent = q ? "Không tìm thấy giọng phù hợp" : "Đang tải giọng...";
+    empty.disabled = true;
+    voiceSelect.appendChild(empty);
+  }
+
   filtered.forEach((v) => {
     const opt = document.createElement("option");
     opt.value = v.name;
@@ -118,6 +126,14 @@ voiceSearch.addEventListener("input", () => {
 });
 
 async function loadVoices() {
+  populateVoices(
+    VI_VOICES.map((name) => ({
+      name,
+      friendly: name === "vi-VN-HoaiMyNeural" ? "Hoài My — nữ" : "Nam Minh — nam",
+      locale: "vi-VN",
+    }))
+  );
+
   try {
     const res = await fetch("/api/voices?locale=vi");
     const data = await res.json();
