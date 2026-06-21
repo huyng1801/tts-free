@@ -134,7 +134,7 @@ def api_tts_download(job_id):
         filepath,
         mimetype="audio/mpeg",
         as_attachment=True,
-        download_name="truyen-audio.mp3",
+        download_name="bao-ngan-truyen.mp3",
     )
 
 

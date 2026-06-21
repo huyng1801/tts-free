@@ -1,6 +1,6 @@
-# TTS Free
+# TTS Bảo Ngân
 
-Trình chuyển văn bản thành giọng nói (Text-to-Speech) miễn phí, không giới hạn ký tự — tối ưu cho làm truyện audio trên điện thoại.
+Trình đọc truyện audio dành riêng cho Bảo Ngân — không giới hạn ký tự, giao diện xinh xắn trên điện thoại.
 
 ## Tính năng
 

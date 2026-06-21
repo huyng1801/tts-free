@@ -27,7 +27,11 @@ const progressFill = $("progressFill");
 const errorBox = $("errorBox");
 const playerBar = $("playerBar");
 const audioPlayer = $("audioPlayer");
+const progressEmoji = $("progressEmoji");
+const successBox = $("successBox");
 const downloadBtn = $("downloadBtn");
+
+const PROGRESS_EMOJIS = ["🌷", "✨", "📖", "🎀", "💫"];
 
 function formatRate(val) {
   if (val === 0) return "Bình thường";
@@ -97,7 +101,7 @@ function populateVoices(voices, filter = "") {
     voiceSelect.appendChild(opt);
   }
 
-  const saved = localStorage.getItem("tts_voice");
+  const saved = localStorage.getItem("bao_ngan_voice") || localStorage.getItem("tts_voice");
   if (saved && [...voiceSelect.options].some((o) => o.value === saved)) {
     voiceSelect.value = saved;
   } else if ([...voiceSelect.options].some((o) => o.value === DEFAULT_VOICE)) {
@@ -106,7 +110,7 @@ function populateVoices(voices, filter = "") {
 }
 
 voiceSelect.addEventListener("change", () => {
-  localStorage.setItem("tts_voice", voiceSelect.value);
+  localStorage.setItem("bao_ngan_voice", voiceSelect.value);
 });
 
 voiceSearch.addEventListener("input", () => {
@@ -150,11 +154,24 @@ function hideError() {
   errorBox.classList.add("hidden");
 }
 
+function hideSuccess() {
+  successBox.classList.add("hidden");
+}
+
 function updateProgress(current, total) {
   progressBox.classList.remove("hidden");
+  hideSuccess();
   const pct = total ? Math.round((current / total) * 100) : 0;
-  progressText.textContent =
-    total > 1 ? `Đang ghép đoạn ${current}/${total}...` : "Đang tạo audio...";
+  if (progressEmoji) {
+    progressEmoji.textContent = PROGRESS_EMOJIS[current % PROGRESS_EMOJIS.length];
+  }
+  if (current === 0) {
+    progressText.textContent = "Đang chuẩn bị đọc truyện...";
+  } else if (total > 1) {
+    progressText.textContent = `Đang đọc đoạn ${current}/${total} nha~`;
+  } else {
+    progressText.textContent = "Đang tạo truyện audio...";
+  }
   progressPercent.textContent = `${pct}%`;
   progressFill.style.width = `${pct}%`;
 }
@@ -162,7 +179,7 @@ function updateProgress(current, total) {
 function formatError(msg) {
   if (!msg) return "Lỗi không xác định";
   if (msg.includes("No audio was received")) {
-    return "Không nhận được audio từ Microsoft TTS. Hãy thử lại sau vài giây, hoặc bỏ emoji/ký tự đặc biệt trong văn bản.";
+    return "Hmm, chưa tạo được audio. Thử lại sau vài giây nha, hoặc bỏ emoji trong văn bản ~";
   }
   return msg;
 }
@@ -199,12 +216,13 @@ async function pollStatus(jobId) {
 generateBtn.addEventListener("click", async () => {
   const text = textInput.value.trim();
   if (!text) {
-    showError("Vui lòng nhập nội dung truyện trước.");
+    showError("Nhập truyện vào ô trên trước nha ♡");
     textInput.focus();
     return;
   }
 
   hideError();
+  hideSuccess();
   setLoading(true);
   progressBox.classList.remove("hidden");
   updateProgress(0, 1);
@@ -229,7 +247,10 @@ generateBtn.addEventListener("click", async () => {
     await pollStatus(data.job_id);
 
     updateProgress(1, 1);
-    progressText.textContent = "Hoàn tất!";
+    progressText.textContent = "Xong rồi nha!";
+    if (progressEmoji) progressEmoji.textContent = "🎉";
+    successBox.classList.remove("hidden");
+    progressBox.classList.add("hidden");
 
     const audioUrl = `/api/tts/${data.job_id}/audio?t=${Date.now()}`;
     audioPlayer.src = audioUrl;
@@ -240,7 +261,7 @@ generateBtn.addEventListener("click", async () => {
       audioPlayer.play().catch(() => {});
     }, 300);
   } catch (e) {
-    showError(e.message || "Không thể tạo audio. Vui lòng thử lại.");
+    showError(e.message || "Có lỗi rồi, thử lại nha ~");
     progressBox.classList.add("hidden");
   } finally {
     setLoading(false);
@@ -250,7 +271,7 @@ generateBtn.addEventListener("click", async () => {
 loadVoices();
 textInput.dispatchEvent(new Event("input"));
 
-const savedText = localStorage.getItem("tts_draft");
+const savedText = localStorage.getItem("bao_ngan_draft") || localStorage.getItem("tts_draft");
 if (savedText) {
   textInput.value = savedText;
   charCount.textContent = savedText.length.toLocaleString("vi-VN");
@@ -260,6 +281,6 @@ let saveTimer;
 textInput.addEventListener("input", () => {
   clearTimeout(saveTimer);
   saveTimer = setTimeout(() => {
-    localStorage.setItem("tts_draft", textInput.value);
+    localStorage.setItem("bao_ngan_draft", textInput.value);
   }, 500);
 });
