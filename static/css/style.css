@@ -563,3 +563,190 @@ audio::-webkit-media-controls-panel {
     animation: none;
   }
 }
+
+/* Truyện Hoàn */
+.source-tabs {
+  display: flex;
+  gap: 8px;
+  background: var(--surface);
+  padding: 6px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-soft);
+}
+
+.source-tab {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 11px 10px;
+  border-radius: calc(var(--radius) - 6px);
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-soft);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.source-tab.active {
+  background: linear-gradient(135deg, #fce7f3, #fbcfe8);
+  color: var(--accent);
+  box-shadow: var(--shadow-soft);
+}
+
+.search-row {
+  display: flex;
+  gap: 8px;
+}
+
+.search-row .input-soft {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.btn-secondary {
+  flex-shrink: 0;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #fdf2f8, #fce7f3);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--accent);
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s, background 0.15s;
+}
+
+.btn-secondary:active:not(:disabled) {
+  transform: scale(0.97);
+  background: #fbcfe8;
+}
+
+.btn-secondary:disabled {
+  opacity: 0.6;
+}
+
+.btn-block {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.story-results {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.story-item {
+  text-align: left;
+  padding: 12px 14px;
+  background: var(--surface-input);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.story-item:active {
+  background: #fce7f3;
+  border-color: var(--border-focus);
+}
+
+.story-item-title {
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: var(--text);
+}
+
+.story-selected {
+  margin-top: 14px;
+  padding: 12px 14px;
+  background: linear-gradient(135deg, rgba(252, 231, 243, 0.8), rgba(253, 242, 248, 0.9));
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+
+.story-selected-title {
+  font-weight: 800;
+  font-size: 1rem;
+  color: var(--text);
+}
+
+.story-selected-meta {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+  font-weight: 600;
+}
+
+.chapter-picker {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chapter-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-chip {
+  flex: 1;
+  padding: 10px;
+  background: var(--surface-input);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--accent);
+  cursor: pointer;
+}
+
+.btn-chip:active {
+  background: #fce7f3;
+}
+
+.input-num {
+  width: 72px;
+  text-align: center;
+  padding: 10px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-weight: 700;
+  color: var(--text);
+  background: var(--surface-input);
+}
+
+.truyenhoan-status {
+  margin-top: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent);
+  text-align: center;
+}
+
+.truyenhoan-status.error {
+  color: #dc2626;
+}
+
+.empty-hint {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  padding: 12px;
+}
+
+.card-truyen .input-soft,
+.card-truyen .select-soft {
+  margin-bottom: 0;
+}

@@ -33,16 +33,53 @@
     </header>
 
     <main class="main">
-      <section class="card card-story">
+      <div class="source-tabs" role="tablist">
+        <button type="button" class="source-tab active" data-tab="truyenhoan" role="tab">📚 Truyện Hoàn</button>
+        <button type="button" class="source-tab" data-tab="manual" role="tab">✏️ Dán text</button>
+      </div>
+
+      <section id="panelTruyenhoan" class="card card-truyen">
+        <div class="card-head">
+          <span class="card-icon">📚</span>
+          <label class="label" for="storySearch">Tìm truyện trên Truyện Hoàn</label>
+        </div>
+        <div class="search-row">
+          <input type="search" id="storySearch" class="input-soft" placeholder="Tên truyện hoặc dán link Truyện Hoàn...">
+          <button type="button" id="storySearchBtn" class="btn-secondary">Tìm</button>
+        </div>
+        <div id="storyResults" class="story-results hidden"></div>
+
+        <div id="storySelected" class="story-selected hidden">
+          <p class="story-selected-title" id="selectedStoryTitle"></p>
+          <p class="story-selected-meta" id="selectedStoryMeta"></p>
+        </div>
+
+        <div id="chapterPicker" class="chapter-picker hidden">
+          <label class="label" for="chapterFilter">Chọn chương</label>
+          <input type="search" id="chapterFilter" class="input-soft" placeholder="Lọc chương (VD: 407)...">
+          <select id="chapterSelect" class="select-soft" size="1"></select>
+          <div class="chapter-nav">
+            <button type="button" id="chapterPrevBtn" class="btn-chip">‹ Trước</button>
+            <input type="number" id="chapterNumInput" class="input-num" min="1" placeholder="Số">
+            <button type="button" id="chapterNextBtn" class="btn-chip">Sau ›</button>
+          </div>
+          <button type="button" id="loadChapterBtn" class="btn-secondary btn-block">
+            📥 Lấy nội dung chương
+          </button>
+        </div>
+
+        <p id="truyenhoanStatus" class="truyenhoan-status hidden"></p>
+      </section>
+
+      <section id="panelManual" class="card card-story">
         <div class="card-head">
           <span class="card-icon">📖</span>
           <label class="label" for="textInput">Nội dung truyện</label>
         </div>
         <textarea
           id="textInput"
-          placeholder="Dán truyện vào đây nha~&#10;&#10;Viết bao nhiêu cũng được, app tự đọc hết cho Bảo Ngân ♡"
+          placeholder="Dán truyện vào đây nha~&#10;&#10;Hoặc chọn chương từ Truyện Hoàn ở trên ♡"
           rows="8"
-          autofocus
         ></textarea>
         <div class="char-count">
           <span class="char-dot"></span>
@@ -58,7 +95,6 @@
         <input type="search" id="voiceSearch" class="input-soft" placeholder="Tìm giọng (VD: Hoài My)...">
         <select id="voiceSelect" class="select-soft"></select>
       </section>
-
       <details class="card card-settings" id="settingsPanel">
         <summary class="settings-toggle">
           <span class="card-icon">🌸</span>
@@ -130,6 +166,7 @@
     </footer>
   </div>
 
+  <script src="/static/js/truyenhoan.js"></script>
   <script src="/static/js/app.js"></script>
 </body>
 </html>

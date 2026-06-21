@@ -6,6 +6,7 @@ from pathlib import Path
 from flask import Flask, jsonify, render_template, request, send_file
 
 from tts_engine import OUTPUT_DIR, run_generate, run_list_voices, split_text
+from truyenhoan_crawler import get_chapter, get_story, search_stories
 
 app = Flask(__name__)
 app.config["MAX_CONTENT_LENGTH"] = 50 * 1024 * 1024
@@ -141,6 +142,47 @@ def api_tts_download(job_id):
 @app.route("/health")
 def health():
     return jsonify({"status": "ok"})
+
+
+@app.route("/api/truyenhoan/search")
+def api_truyenhoan_search():
+    q = request.args.get("q", "").strip()
+    if not q:
+        return jsonify({"ok": False, "error": "Nhập tên truyện để tìm"}), 400
+    try:
+        stories = search_stories(q)
+        return jsonify({"ok": True, "stories": stories})
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
+
+
+@app.route("/api/truyenhoan/story")
+def api_truyenhoan_story():
+    url = request.args.get("url", "").strip()
+    if not url:
+        return jsonify({"ok": False, "error": "Thiếu link truyện"}), 400
+    try:
+        story = get_story(url)
+        return jsonify({"ok": True, "story": story})
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
+
+
+@app.route("/api/truyenhoan/chapter")
+def api_truyenhoan_chapter():
+    url = request.args.get("url", "").strip()
+    slug = request.args.get("slug", "").strip()
+    number = request.args.get("number", type=int)
+    try:
+        if url:
+            chapter = get_chapter(chapter_url=url)
+        elif slug and number:
+            chapter = get_chapter(slug=slug, number=number)
+        else:
+            return jsonify({"ok": False, "error": "Thiếu link hoặc số chương"}), 400
+        return jsonify({"ok": True, "chapter": chapter})
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
 
 
 if __name__ == "__main__":
