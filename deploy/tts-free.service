@@ -7,7 +7,7 @@ Type=simple
 User=www-data
 Group=www-data
 WorkingDirectory=/opt/tts-free
-Environment=PATH=/opt/tts-free/venv/bin
+Environment=PATH=/opt/tts-free/venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 ExecStart=/opt/tts-free/venv/bin/gunicorn --workers 2 --threads 4 --timeout 600 --bind 127.0.0.1:5000 app:app
 Restart=always
 RestartSec=5

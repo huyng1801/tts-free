@@ -1,5 +1,6 @@
 import asyncio
 import re
+import shutil
 import subprocess
 import tempfile
 import uuid
@@ -11,6 +12,13 @@ OUTPUT_DIR = Path("output")
 OUTPUT_DIR.mkdir(exist_ok=True)
 
 CHUNK_SIZE = 4000
+
+
+def get_ffmpeg() -> str:
+    for candidate in (shutil.which("ffmpeg"), "/usr/bin/ffmpeg", "/usr/local/bin/ffmpeg"):
+        if candidate and Path(candidate).exists():
+            return candidate
+    raise FileNotFoundError("ffmpeg không tìm thấy. Cài đặt: apt install ffmpeg")
 
 
 def split_text(text: str) -> list[str]:
@@ -95,7 +103,7 @@ def merge_audio_files(files: list[Path], output_path: Path) -> None:
     try:
         subprocess.run(
             [
-                "ffmpeg",
+                get_ffmpeg(),
                 "-y",
                 "-f",
                 "concat",
