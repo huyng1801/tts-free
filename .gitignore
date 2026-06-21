@@ -7,6 +7,5 @@ env/
 .env
 output/
 *.mp3
-*.wav
 .DS_Store
 Thumbs.db
