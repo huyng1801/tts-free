@@ -159,6 +159,14 @@ function updateProgress(current, total) {
   progressFill.style.width = `${pct}%`;
 }
 
+function formatError(msg) {
+  if (!msg) return "Lỗi không xác định";
+  if (msg.includes("No audio was received")) {
+    return "Không nhận được audio từ Microsoft TTS. Hãy thử lại sau vài giây, hoặc bỏ emoji/ký tự đặc biệt trong văn bản.";
+  }
+  return msg;
+}
+
 async function pollStatus(jobId) {
   return new Promise((resolve, reject) => {
     pollTimer = setInterval(async () => {
@@ -178,7 +186,7 @@ async function pollStatus(jobId) {
           resolve(data.result);
         } else if (data.status === "error") {
           clearInterval(pollTimer);
-          reject(new Error(data.error || "Lỗi không xác định"));
+          reject(new Error(formatError(data.error)));
         }
       } catch (e) {
         clearInterval(pollTimer);

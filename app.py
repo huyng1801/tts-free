@@ -5,7 +5,7 @@ from pathlib import Path
 
 from flask import Flask, jsonify, render_template, request, send_file
 
-from tts_engine import OUTPUT_DIR, run_generate, run_list_voices
+from tts_engine import OUTPUT_DIR, run_generate, run_list_voices, split_text
 
 app = Flask(__name__)
 app.config["MAX_CONTENT_LENGTH"] = 50 * 1024 * 1024
@@ -71,12 +71,13 @@ def api_tts():
         return jsonify({"ok": False, "error": "Vui lòng nhập nội dung truyện"}), 400
 
     job_id = f"job_{int(time.time() * 1000)}"
+    chunks = split_text(text)
     save_job(
         job_id,
         {
             "status": "processing",
             "progress": 0,
-            "total": 0,
+            "total": len(chunks),
             "error": None,
             "result": None,
         },
